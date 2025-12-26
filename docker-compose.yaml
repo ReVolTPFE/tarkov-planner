@@ -1,0 +1,43 @@
+services:
+    app:
+        build: .
+        ports:
+            - "3000:3000"
+        volumes:
+            - .:/app
+            - /app/node_modules
+        env_file:
+            - .env
+        depends_on:
+            db:
+                condition: service_healthy
+        restart: always
+
+    db:
+        image: mysql:8.0
+        restart: always
+        environment:
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        ports:
+            - "3306:3306"
+        healthcheck:
+            test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+        volumes:
+            - mysql_data:/var/lib/mysql
+
+    phpmyadmin:
+        image: phpmyadmin:latest
+        restart: always
+        ports:
+            - "8080:80"
+        environment:
+            - PMA_HOST=db
+        depends_on:
+            - db
+
+volumes:
+    mysql_data:
