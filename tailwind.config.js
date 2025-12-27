@@ -4,7 +4,15 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				"primary": "#EF7900"
+				"primary": "#ff5e00",
+				"gray": {
+					"border": "#383838",
+					"lighter": "#dbd9d7",
+					"light": "#8a8580",
+					"medium": "#2e2e2e",
+					"dark": "#1a1a1a",
+					"darker": "#141414",
+				}
 			}
 		},
 	},
