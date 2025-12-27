@@ -2,14 +2,18 @@
 export default defineNuxtConfig({
 	compatibilityDate: '2025-07-15',
 	devtools: { enabled: true },
+	future: {
+		compatibilityVersion: 4,
+	},
 
 	vite: {
 		server: {
 			watch: {
 				usePolling: true,
+				interval: 1000,
 			},
 		},
 	},
 
-	modules: ['@nuxtjs/tailwindcss'],
+	modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
 });
