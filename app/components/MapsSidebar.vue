@@ -11,12 +11,12 @@
 <template>
 	<div class="h-full flex flex-col overflow-hidden bg-gray-darker border-r border-r-gray-border">
 		<div class="border-b border-b-gray-border p-4">
-			<p class="text-primary font-bold text-xl">OPERATIONS</p>
-			<p class="text-gray-light text-sm">SELECT A MAP</p>
+			<p class="text-primary font-bold text-xl uppercase">Operations</p>
+			<p class="text-gray-light text-sm uppercase">Select a map</p>
 		</div>
 
 		<div v-if="mapStore.maps.length" class="flex-1 overflow-y-auto scrollbar-hide p-4">
-			<div v-for="map in mapStore.maps" class="my-4 first:mt-0 last:mb-0 bg-gray-medium border-2 border-gray-light rounded">
+			<div v-for="map in mapStore.maps" :key="map.id" @click="mapStore.selectMap(map.id)" class="my-4 first:mt-0 last:mb-0 bg-gray-dark border-2 border-gray-border rounded cursor-pointer">
 				<div class="h-32">
 					<img :src="`/img/maps/${map.image}`" alt="" class="w-full h-full object-contain">
 				</div>
@@ -30,7 +30,7 @@
 			</div>
 		</div>
 
-		<p class="text-center py-4 border-t border-t-gray-border text-gray-light cursor-pointer">COLLAPSE</p>
+<!--		<p class="text-center py-4 border-t border-t-gray-border text-gray-light cursor-pointer text-sm uppercase">< Collapse</p>-->
 	</div>
 
 </template>

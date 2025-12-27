@@ -15,10 +15,12 @@
 		"@prisma/adapter-mariadb": "^7.2.0",
 		"@prisma/client": "^7.2.0",
 		"dotenv": "^17.2.3",
+		"konva": "^10.0.12",
 		"nuxt": "^4.2.2",
 		"socket.io": "^4.8.3",
 		"socket.io-client": "^4.8.3",
 		"vue": "^3.5.26",
+		"vue-konva": "^3.2.6",
 		"vue-router": "^4.6.4"
 	},
 	"devDependencies": {

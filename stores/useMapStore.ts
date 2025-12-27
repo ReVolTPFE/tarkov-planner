@@ -18,7 +18,7 @@ export const useMapStore = defineStore("map", {
                 console.error("Erreur lors du chargement des cartes :", error);
             } finally {
                 this.isLoading = false;
-            };
+            }
         },
 
         selectMap(id: string) {
@@ -26,7 +26,7 @@ export const useMapStore = defineStore("map", {
         },
     },
 
-	getters: {
+    getters: {
         getCurrentMap: (state) => {
             return state.maps.find((m) => m.id === state.currentMapId) || null;
         },
