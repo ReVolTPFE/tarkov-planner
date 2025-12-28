@@ -4,7 +4,7 @@ import { $fetch } from "ofetch" ;
 export const useMapStore = defineStore("map", {
     state: () => ({
         maps: [] as any[],
-        currentMapId: null as string | null,
+        currentMapId: "1" as string | null,
         isLoading: false,
     }),
 

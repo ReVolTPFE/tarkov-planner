@@ -16,21 +16,26 @@
 		</div>
 
 		<div v-if="mapStore.maps.length" class="flex-1 overflow-y-auto scrollbar-hide p-4">
-			<div v-for="map in mapStore.maps" :key="map.id" @click="mapStore.selectMap(map.id)" class="my-4 first:mt-0 last:mb-0 bg-gray-dark border-2 border-gray-border rounded cursor-pointer">
+			<div v-for="map in mapStore.maps"
+				 :key="map.id"
+				 @click="mapStore.selectMap(map.id)"
+				 class="my-4 first:mt-0 last:mb-0 bg-gray-dark border-2 border-gray-border rounded cursor-pointer"
+				 :class="{ 'border-primary': mapStore.currentMapId === map.id }"
+			>
 				<div class="h-32">
 					<img :src="`/img/maps/${map.image}`" alt="" class="w-full h-full object-contain">
 				</div>
 				<div class="p-3">
 					<p class="text-white uppercase font-bold">{{ map.slug }}</p>
-					<div class="flex justify-between items-end">
-						<p class="text-primary uppercase text-sm mt-2">Medium</p>
-						<p class="text-sm text-gray-light">8-12</p>
-					</div>
+<!--					<div class="flex justify-between items-end">-->
+<!--						<p class="text-primary uppercase text-sm mt-2">Medium</p>-->
+<!--						<p class="text-sm text-gray-light">8-12</p>-->
+<!--					</div>-->
 				</div>
 			</div>
 		</div>
 
-<!--		<p class="text-center py-4 border-t border-t-gray-border text-gray-light cursor-pointer text-sm uppercase">< Collapse</p>-->
+<!--		<p class="text-center py-4 border-t border-t-gray-border text-gray-light cursor-pointer text-sm uppercase"><i class="fa-solid fa-arrow-left"></i> <span class="pl-2">Collapse</span></p>-->
 	</div>
 
 </template>

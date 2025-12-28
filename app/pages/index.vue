@@ -5,7 +5,7 @@ import { navigateTo } from "nuxt/app";
 const roomStore = useRoomStore();
 async function createNewRoom() {
 	const newRoom = await roomStore.createRoom();
-	console.log(newRoom);
+
 	navigateTo(`/rooms/${newRoom.uuid}`);
 }
 </script>

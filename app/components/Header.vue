@@ -19,8 +19,8 @@ async function copyRoomLink() {
 		</NuxtLink>
 
 		<nav v-if="isRoomPage">
-			<button @click="copyRoomLink" class="mx-4 text-white bg-primary p-2 rounded w-32">{{ copied ? 'Copied !' : 'Copy room link' }}</button>
-			<NuxtLink to="/" class="mx-4 text-gray-lighter border border-gray-medium p-2 rounded">Back to home</NuxtLink>
+			<NuxtLink @click.prevent="copyRoomLink" class="mx-4 text-white bg-primary p-2 rounded cursor-pointer"><i class="fa-regular fa-copy mr-2"></i>{{ copied ? 'Copied !' : 'Copy room link' }}</NuxtLink>
+			<NuxtLink to="/" class="text-gray-lighter border border-gray-medium p-2 rounded">Back to home</NuxtLink>
 		</nav>
 	</header>
 </template>
