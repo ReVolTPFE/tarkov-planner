@@ -143,7 +143,7 @@ const handleMouseUp = (e) => {
 </script>
 
 <template>
-	<div id="canva" ref="container" class="h-full border-2 border-gray-border overflow-hidden relative">
+	<div id="canva" ref="container" class="h-full border-2 border-gray-border overflow-hidden relative rounded">
 		<CanvaToolbarOverlay />
 
 		<ClientOnly fallback="Loading canva...">

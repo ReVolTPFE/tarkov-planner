@@ -29,10 +29,10 @@ export const useDrawingStore = defineStore("drawing", {
                 type: "undo",
                 icon: "fa-solid fa-rotate-left",
             },
-            {
-                type: "redo",
-                icon: "fa-solid fa-rotate-right",
-            },
+            // {
+            //     type: "redo",
+            //     icon: "fa-solid fa-rotate-right",
+            // },
             {
                 type: "trash",
                 icon: "fa-solid fa-trash",

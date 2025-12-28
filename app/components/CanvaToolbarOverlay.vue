@@ -17,7 +17,7 @@ const handleToolClick = (tool) => {
 </script>
 
 <template>
-	<div class="absolute top-1/2 -translate-y-1/2 left-4 z-50 border-2 border-gray-border bg-gray-darker text-gray-lighter p-2">
+	<div class="absolute top-1/2 -translate-y-1/2 left-4 z-50 border-2 border-gray-border bg-gray-darker text-gray-lighter p-2 rounded">
 		<p v-for="tool in drawingStore.tools"
 		   :key="tool.type"
 		   class="tool"
