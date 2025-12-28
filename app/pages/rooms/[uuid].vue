@@ -1,12 +1,14 @@
 <script setup>
 import MapsSidebar from '~/components/MapsSidebar.vue';
+import Canva from "../../components/Canva.vue";
 import { useRoomStore } from "../../../stores/useRoomStore.js";
 import { useMapStore } from "../../../stores/useMapStore.js";
-import Canva from "../../components/Canva.vue";
+import { useDrawingStore } from "../../../stores/useDrawingStore.js";
 
 const route = useRoute();
 const mapStore = useMapStore();
 const roomStore = useRoomStore();
+const drawingStore = useDrawingStore();
 
 watch(() => route.params.uuid, (newUuid) => {
 	roomStore.fetchRoom(newUuid);
@@ -15,6 +17,7 @@ watch(() => route.params.uuid, (newUuid) => {
 onUnmounted(() => {
 	mapStore.$reset();
 	roomStore.$reset();
+	drawingStore.$reset();
 });
 </script>
 
