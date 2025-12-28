@@ -1,8 +1,11 @@
 <script setup>
 import { useImage } from "vue-konva";
 import { useMapStore } from "../../stores/useMapStore.js";
+import { useDrawingStore } from "../../stores/useDrawingStore.js";
+import CanvaToolbarOverlay from "./CanvaToolbarOverlay.vue";
 
 const mapStore = useMapStore();
+const drawingStore = useDrawingStore();
 const container = ref(null);
 
 const [mapImage] = useImage(computed(() => {
@@ -24,7 +27,36 @@ const stageConfig = reactive({
 	scaleY: 1,
 	x: 0,
 	y: 0,
-	draggable: true
+	draggable: false
+});
+
+// On synchronise le draggable avec l'outil sélectionné
+watch(() => drawingStore.currentTool, (newTool) => {
+	stageConfig.draggable = (newTool === 'pointer');
+}, { immediate: true });
+
+const fitStageToImage = () => {
+	if (!mapImage.value || !container.value) return;
+
+	const stageWidth = container.value.offsetWidth;
+	const stageHeight = container.value.offsetHeight;
+	const imgWidth = mapImage.value.width;
+	const imgHeight = mapImage.value.height;
+
+	// On calcule le ratio pour que l'image tienne dans le cadre (contain)
+	const ratio = Math.min(stageWidth / imgWidth, stageHeight / imgHeight);
+
+	// On applique le scale et on centre l'image
+	stageConfig.scaleX = ratio;
+	stageConfig.scaleY = ratio;
+	stageConfig.x = (stageWidth - imgWidth * ratio) / 2;
+	stageConfig.y = (stageHeight - imgHeight * ratio) / 2;
+};
+
+watch(mapImage, () => {
+	if (mapImage.value) {
+		fitStageToImage();
+	}
 });
 
 const handleWheel = (e) => {
@@ -55,19 +87,82 @@ const handleWheel = (e) => {
 };
 
 onMounted(() => {
+	// temp, on garde la 1e map par défaut au F5
+	mapStore.selectMap(1);
+
 	if (container.value) {
 		stageConfig.width = container.value.offsetWidth;
 		stageConfig.height = container.value.offsetHeight;
 	}
 });
+
+const handleMouseDown = (e) => {
+	if (e.evt.button === 1) {
+		e.evt.preventDefault();
+
+		stageConfig.draggable = true;
+
+		const stage = e.target.getStage();
+		// On force Konva à démarrer le drag immédiatement
+		stage.startDrag();
+
+		return; // On arrête là, on ne veut pas dessiner avec la molette
+	}
+
+	const stage = e.target.getStage();
+	const pos = stage.getRelativePointerPosition(); // Position adaptée au zoom/pan
+
+	if (pos) {
+		drawingStore.startShape(pos);
+	}
+};
+
+const handleMouseMove = (e) => {
+	// Si on ne dessine pas, on ne calcule rien pour économiser le CPU
+	if (!drawingStore.isDrawing) return;
+
+	const stage = e.target.getStage();
+	const pos = stage.getRelativePointerPosition();
+
+	if (pos) {
+		drawingStore.updateShape(pos);
+	}
+};
+
+const handleMouseUp = (e) => {
+	// Si on lâche la molette, on désactive le drag (sauf si l'outil actuel est le pointer)
+	if (e.evt.button === 1) {
+		if (drawingStore.currentTool !== 'pointer') {
+			stageConfig.draggable = false;
+		}
+		return;
+	}
+
+	drawingStore.stopDrawing();
+};
 </script>
 
 <template>
-	<div id="#canva" ref="container" class="h-full border-2 border-gray-border overflow-hidden">
+	<div id="canva" ref="container" class="h-full border-2 border-gray-border overflow-hidden relative">
+		<CanvaToolbarOverlay />
+
 		<ClientOnly fallback="Loading canva...">
-			<v-stage :config="stageConfig" @wheel="handleWheel">
+			<!-- Si on sort du cadre, ça stoppe le dessin au mouseleave -->
+			<v-stage
+				:config="stageConfig"
+				@wheel="handleWheel"
+				@mousedown="handleMouseDown"
+				@mousemove="handleMouseMove"
+				@mouseup="handleMouseUp"
+				@mouseleave="handleMouseUp"
+				@contextmenu="(e) => e.evt.preventDefault()"
+			>
 				<v-layer>
 					<v-image :config="mapImageConfig" />
+
+					<template v-for="shape in drawingStore.activeMapShapes" :key="shape.id">
+						<v-line v-if="shape.type === 'pen' || shape.type === 'line'" :config="shape" />
+					</template>
 				</v-layer>
 			</v-stage>
 		</ClientOnly>
