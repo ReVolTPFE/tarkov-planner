@@ -16,4 +16,16 @@ export default defineNuxtConfig({
 	},
 
 	modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
+	app: {
+		head: {
+			script: [
+				{
+					src: 'https://kit.fontawesome.com/8ba44779d9.js',
+					defer: true,
+					type: 'text/javascript',
+					crossorigin: "anonymous",
+				}
+			],
+		}
+	}
 });
