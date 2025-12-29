@@ -64,6 +64,18 @@ watch(mapImage, (newImg) => { if (newImg) fitStageToImage(); });
 								pointerWidth: 15
 							}"
 						/>
+
+						<v-rect v-if="shape.type === 'square'" :config="{
+							   x: Math.min(shape.points[0], shape.points[2]),
+							   y: Math.min(shape.points[1], shape.points[3]),
+							   width: Math.abs(shape.points[2] - shape.points[0]),
+							   height: Math.abs(shape.points[3] - shape.points[1]),
+							   stroke: shape.stroke,
+							   strokeWidth: shape.strokeWidth,
+							   lineCap: 'round',
+							   lineJoin: 'round'
+						   }"
+						/>
 					</template>
 				</v-layer>
 			</v-stage>

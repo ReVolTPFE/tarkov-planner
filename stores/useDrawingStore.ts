@@ -137,7 +137,8 @@ export const useDrawingStore = defineStore("drawing", {
                 // On crée une copie propre du tableau de points
                 const newPoints = [...this.activeShape.points];
 
-                // On met à jour le point d'arrivée (index 2 et 3)
+                // newPoints[0] et [1] sont le clic initial
+                // newPoints[2] et [3] deviennent la position actuelle de la souris
                 newPoints[2] = pos.x;
                 newPoints[3] = pos.y;
 
