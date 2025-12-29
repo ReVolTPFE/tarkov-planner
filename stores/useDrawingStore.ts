@@ -145,6 +145,31 @@ export const useDrawingStore = defineStore("drawing", {
                 // On réassigne le tableau entier pour déclencher la réactivité
                 this.activeShape.points = newPoints;
             }
+
+            // Cercle par son centre
+            // else if (this.activeShape.type === 'circle') {
+            //     const x1 = this.activeShape.points[0];
+            //     const y1 = this.activeShape.points[1];
+            //     // Calcul de la distance entre le centre et la souris
+            //     const radius = Math.sqrt(Math.pow(pos.x - x1, 2) + Math.pow(pos.y - y1, 2));
+            //     this.activeShape.radius = radius;
+            // }
+
+            // Cercle par top/left => Mais c'est plutot une ellipse maintenant
+            else if (this.activeShape.type === 'circle') {
+                const x1 = this.activeShape.points[0];
+                const y1 = this.activeShape.points[1];
+                const x2 = pos.x;
+                const y2 = pos.y;
+
+                // Le centre est toujours le milieu du segment [Clic initial -> Souris]
+                this.activeShape.centerX = (x1 + x2) / 2;
+                this.activeShape.centerY = (y1 + y2) / 2;
+
+                // Rayons calculés (distance au centre)
+                this.activeShape.radiusX = Math.abs(x2 - x1) / 2;
+                this.activeShape.radiusY = Math.abs(y2 - y1) / 2;
+            }
         },
 
         stopDrawing() {

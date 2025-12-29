@@ -76,6 +76,28 @@ watch(mapImage, (newImg) => { if (newImg) fitStageToImage(); });
 							   lineJoin: 'round'
 						   }"
 						/>
+							<!-- Cercle par son centre -->
+<!--						<v-circle v-if="shape.type === 'circle'" :config="{-->
+<!--								x: shape.points[0],-->
+<!--								y: shape.points[1],-->
+<!--								radius: shape.radius || 0,-->
+<!--								stroke: shape.stroke,-->
+<!--								strokeWidth: shape.strokeWidth-->
+<!--							}" -->
+<!--						/>-->
+
+						<!-- Cercle par top/left mais c'est plutôt une ellipse maintenant -->
+						<v-ellipse
+							v-if="shape.type === 'circle'"
+							:config="{
+								x: shape.centerX,
+								y: shape.centerY,
+								radiusX: shape.radiusX || 0,
+								radiusY: shape.radiusY || 0,
+								stroke: shape.stroke,
+								strokeWidth: shape.strokeWidth
+							}"
+						/>
 					</template>
 				</v-layer>
 			</v-stage>
