@@ -20,15 +20,15 @@ function toggleMapsShowing() {
 <template>
 	<header class="relative h-16 flex justify-between items-center border-b-2 border-b-gray-border bg-gray-dark text-gray-light px-4">
 		<NuxtLink to="/">
-			<h1 class="text-xl font-bold text-primary uppercase">Tarkov Planner</h1>
-			<p>v0.1.0</p>
+			<h1 class="text-sm sm:text-lg md:text-xl font-bold text-primary uppercase">Tarkov Planner</h1>
+			<p class="text-sm md:text-base">v0.1.0</p>
 		</NuxtLink>
 
-		<button @click="toggleMapsShowing" class="mx-4 text-white bg-primary py-2 px-4 rounded cursor-pointer">Show maps <i class="fa-solid fa-map-location-dot ml-1"></i></button>
+		<button @click="toggleMapsShowing" class="mx-4 text-white bg-primary py-2 px-4 rounded cursor-pointer"><span class="hidden md:inline">Show maps</span> <i class="fa-solid fa-map-location-dot md:ml-1"></i></button>
 
 		<nav v-if="isRoomPage">
-			<NuxtLink @click.prevent="copyRoomLink" class="mx-4 text-white bg-primary p-2 rounded cursor-pointer"><i class="fa-regular fa-copy mr-2"></i>{{ copied ? 'Copied !' : 'Copy room link' }}</NuxtLink>
-			<NuxtLink to="/" class="text-gray-lighter border border-gray-medium p-2 rounded"><i class="fa-solid fa-arrow-left mr-1"></i> Back to home</NuxtLink>
+			<NuxtLink @click.prevent="copyRoomLink" class="inline-block md:w-40 mx-2 md:mx-4 text-center text-white bg-primary p-2 rounded cursor-pointer"><i class="fa-solid fa-link md:mr-2"></i> <span class="hidden md:inline">{{ copied ? 'Copied !' : 'Copy room link' }}</span></NuxtLink>
+			<NuxtLink to="/" class="inline-block text-gray-lighter border border-gray-medium p-2 rounded"><i class="fa-solid fa-home md:mr-1"></i> <span class="hidden md:inline">Home</span></NuxtLink>
 		</nav>
 
 		<div
