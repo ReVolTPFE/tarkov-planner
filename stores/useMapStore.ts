@@ -30,5 +30,9 @@ export const useMapStore = defineStore("map", {
         getCurrentMap: (state) => {
             return state.maps.find((m) => m.id === state.currentMapId) || null;
         },
+
+        getMapBySlug: (state) => {
+            return (slug: string) => state.maps.find((m) => m.slug === slug) || null;
+        }
     },
 });

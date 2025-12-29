@@ -24,7 +24,7 @@ function toggleMapsShowing() {
 			<p class="text-sm md:text-base">v0.1.0</p>
 		</NuxtLink>
 
-		<button @click="toggleMapsShowing" class="mx-4 text-white bg-primary py-2 px-4 rounded cursor-pointer"><span class="hidden md:inline">Show maps</span> <i class="fa-solid fa-map-location-dot md:ml-1"></i></button>
+		<button v-if="isRoomPage" @click="toggleMapsShowing" class="mx-4 text-white bg-primary py-2 px-4 rounded cursor-pointer"><span class="hidden md:inline">Show maps</span> <i class="fa-solid fa-map-location-dot md:ml-1"></i></button>
 
 		<nav v-if="isRoomPage">
 			<NuxtLink @click.prevent="copyRoomLink" class="inline-block md:w-40 mx-2 md:mx-4 text-center text-white bg-primary p-2 rounded cursor-pointer"><i class="fa-solid fa-link md:mr-2"></i> <span class="hidden md:inline">{{ copied ? 'Copied !' : 'Copy room link' }}</span></NuxtLink>

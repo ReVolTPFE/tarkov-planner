@@ -7,11 +7,23 @@ services:
             - .:/app
             - /app/node_modules
             - /app/.nuxt
+            # On isole le dossier server-ws pour que le volume parent "."
+            # ne vienne pas polluer ou écraser le contenu du conteneur WS
+            - /app/server-ws
         env_file:
             - .env
         depends_on:
             db:
                 condition: service_healthy
+        restart: always
+
+    ws:
+        build: ./server-ws
+        ports:
+            - "3001:3001"
+        volumes:
+            - ./server-ws:/app
+            - /app/node_modules
         restart: always
 
     db:

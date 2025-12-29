@@ -8,16 +8,24 @@ const route = useRoute();
 const mapStore = useMapStore();
 const roomStore = useRoomStore();
 const drawingStore = useDrawingStore();
+const { $socket } = useNuxtApp();
+const roomUuid = route.params.uuid;
 
 watch(() => route.params.uuid, (newUuid) => {
 	roomStore.fetchRoom(newUuid);
 }, { immediate: true });
 
 onMounted(() => {
+	$socket.connect();
+
+	// On rejoint la room dès que le composant est chargé
+	$socket.emit("join-room", roomUuid);
 	mapStore.fetchMaps();
 });
 
 onUnmounted(() => {
+	$socket.disconnect();
+
 	mapStore.$reset();
 	roomStore.$reset();
 	drawingStore.$reset();

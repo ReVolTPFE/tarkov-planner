@@ -1,12 +1,14 @@
 <script setup>
 import { useDrawingStore } from "../../stores/useDrawingStore.js";
+import { useMapStore } from "../../stores/useMapStore.js";
 
 const drawingStore = useDrawingStore();
+const mapStore = useMapStore();
 
 const handleToolClick = (tool) => {
 	if (['undo', 'redo', 'trash', 'fullscreen'].includes(tool.type)) {
 		// C'est une action immédiate
-		if (tool.type === 'trash') drawingStore.clearCurrentMap();
+		if (tool.type === 'trash') drawingStore.clearMap(mapStore.getCurrentMap.slug, false);
 		if (tool.type === 'undo') drawingStore.undoOnCurrentMap();
 		if (tool.type === 'fullscreen') drawingStore.toggleFullscreenMode();
 		// On ne change pas le currentTool ici !

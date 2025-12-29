@@ -25,10 +25,10 @@ export const useDrawingStore = defineStore("drawing", {
                 type: "circle",
                 icon: "fa-regular fa-circle",
             },
-            {
-                type: "undo",
-                icon: "fa-solid fa-rotate-left",
-            },
+            // {
+            //     type: "undo",
+            //     icon: "fa-solid fa-rotate-left",
+            // },
             // {
             //     type: "redo",
             //     icon: "fa-solid fa-rotate-right",
@@ -65,13 +65,14 @@ export const useDrawingStore = defineStore("drawing", {
             this.drawings[mapSlug].push(shape);
         },
 
-        clearCurrentMap() {
-            const mapStore = useMapStore();
-            const map = mapStore.getCurrentMap;
-
-            if (map !== null) {
-                this.drawings[map.slug] = [];
+        clearMap(mapSlug: string, localOnly = true) {
+            if (!localOnly) {
+                const { $socket } = useNuxtApp();
+                const route = useRoute();
+                $socket.emit("clear-canva", { roomId: route.params.uuid, mapSlug: mapSlug });
             }
+
+            this.drawings[mapSlug] = [];
         },
 
         undoOnCurrentMap() {
@@ -173,6 +174,23 @@ export const useDrawingStore = defineStore("drawing", {
         },
 
         stopDrawing() {
+            if (!this.isDrawing || !this.activeShape) return;
+
+            // 1. On récupère les infos nécessaires
+            const mapStore = useMapStore();
+            const { $socket } = useNuxtApp();
+            const route = useRoute();
+
+            // 2. On prépare le paquet de données
+            const payload = {
+                roomId: route.params.uuid,
+                mapSlug: mapStore.getCurrentMap?.slug,
+                shape: this.activeShape
+            };
+
+            // 3. On envoie au serveur
+            $socket.emit("send-shape", payload);
+
             this.isDrawing = false;
             this.activeShape = null;
         },
