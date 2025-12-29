@@ -49,6 +49,7 @@ export const useDrawingStore = defineStore("drawing", {
         isDrawing: false,
         activeShape: null as any | null, // La forme en cours de tracé
         currentColor: "#ff5e00",
+        currentStrokeWidth: 10
     }),
 
     actions: {
@@ -97,7 +98,7 @@ export const useDrawingStore = defineStore("drawing", {
                 // Pour un carré, x-y sera le point d'origine
                 points: [pos.x, pos.y],
                 stroke: this.currentColor,
-                strokeWidth: 3,
+                strokeWidth: this.currentStrokeWidth,
                 draggable: false, // On pourra le rendre draggable plus tard pour le modifier
                 lineCap: 'round',
                 lineJoin: 'round',
@@ -123,7 +124,7 @@ export const useDrawingStore = defineStore("drawing", {
                 // Calcul de la distance entre le dernier point et la souris
                 const dist = Math.sqrt(Math.pow(pos.x - lastX, 2) + Math.pow(pos.y - lastY, 2));
 
-                if (dist > 3) { // On n'ajoute un point que si on a bougé de plus de 3 pixels
+                if (dist > 5) { // On n'ajoute un point que si on a bougé de plus de 3 pixels
                     this.activeShape.points.push(pos.x, pos.y);
 
                     // On force la réactivité en "réassignant" le tableau à lui-même
@@ -149,6 +150,14 @@ export const useDrawingStore = defineStore("drawing", {
             this.isDrawing = false;
             this.activeShape = null;
         },
+
+        toggleFullscreenMode() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
     },
 
     getters: {

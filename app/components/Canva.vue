@@ -90,11 +90,21 @@ onMounted(() => {
 	// temp, on garde la 1e map par défaut au F5
 	mapStore.selectMap(1);
 
+	updateCanvasSize();
+
+	window.addEventListener('resize', updateCanvasSize);
+	document.addEventListener('fullscreenchange', updateCanvasSize);
+});
+
+const updateCanvasSize = () => {
 	if (container.value) {
 		stageConfig.width = container.value.offsetWidth;
 		stageConfig.height = container.value.offsetHeight;
+
+		// Recentrer la map après le resize
+		fitStageToImage();
 	}
-});
+};
 
 const handleMouseDown = (e) => {
 	if (e.evt.button === 1) {
@@ -143,7 +153,7 @@ const handleMouseUp = (e) => {
 </script>
 
 <template>
-	<div id="canva" ref="container" class="h-full border-2 border-gray-border overflow-hidden relative rounded">
+	<div id="canva" ref="container" class="w-full h-full border-2 border-gray-border overflow-hidden relative rounded">
 		<CanvaToolbarOverlay />
 
 		<ClientOnly fallback="Loading canva...">

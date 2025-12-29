@@ -9,18 +9,33 @@ async function copyRoomLink() {
 	copied.value = true;
 	setTimeout(() => copied.value = false, 2000);
 }
+
+const areMapsHidden = ref(true);
+
+function toggleMapsShowing() {
+	areMapsHidden.value = !areMapsHidden.value;
+}
 </script>
 
 <template>
-	<header class="h-16 flex justify-between items-center border-b border-b-gray-border bg-gray-dark text-gray-light px-4">
+	<header class="relative h-16 flex justify-between items-center border-b-2 border-b-gray-border bg-gray-dark text-gray-light px-4">
 		<NuxtLink to="/">
 			<h1 class="text-xl font-bold text-primary uppercase">Tarkov Planner</h1>
 			<p>v0.1.0</p>
 		</NuxtLink>
 
+		<button @click="toggleMapsShowing" class="mx-4 text-white bg-primary py-2 px-4 rounded cursor-pointer">Show maps <i class="fa-solid fa-map-location-dot ml-1"></i></button>
+
 		<nav v-if="isRoomPage">
 			<NuxtLink @click.prevent="copyRoomLink" class="mx-4 text-white bg-primary p-2 rounded cursor-pointer"><i class="fa-regular fa-copy mr-2"></i>{{ copied ? 'Copied !' : 'Copy room link' }}</NuxtLink>
 			<NuxtLink to="/" class="text-gray-lighter border border-gray-medium p-2 rounded"><i class="fa-solid fa-arrow-left mr-1"></i> Back to home</NuxtLink>
 		</nav>
+
+		<div
+			v-if="!areMapsHidden"
+			class="absolute top-[calc(100%+2px)] left-0 w-full z-[100] bg-gray-dark border-b border-gray-border shadow-xl"
+		>
+			<MapsNav @close="toggleMapsShowing" />
+		</div>
 	</header>
 </template>

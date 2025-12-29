@@ -8,6 +8,7 @@ const handleToolClick = (tool) => {
 		// C'est une action immédiate
 		if (tool.type === 'trash') drawingStore.clearCurrentMap();
 		if (tool.type === 'undo') drawingStore.undoOnCurrentMap();
+		if (tool.type === 'fullscreen') drawingStore.toggleFullscreenMode();
 		// On ne change pas le currentTool ici !
 	} else {
 		// C'est un mode de dessin (pointer, pen, circle...)
