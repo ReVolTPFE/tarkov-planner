@@ -42,7 +42,7 @@ export const useDrawingStore = defineStore("drawing", {
                 icon: "fa-solid fa-expand",
             },
         ],
-        currentTool: "pointer" as string | null,
+        currentTool: "pointer" as string,
         isLoading: false,
         // Structure : { "customs": [{id: 1, points: []}], "reserve": [] }
         drawings: {} as Record<string, any[]>,
@@ -89,20 +89,20 @@ export const useDrawingStore = defineStore("drawing", {
             if (!mapSlug || this.currentTool === 'pointer') return;
 
             this.isDrawing = true;
+            const isGeometrical = ['arrow', 'square', 'circle'].includes(this.currentTool);
 
             // On crée l'objet de base
             const newShape = {
                 id: Date.now().toString(),
                 type: this.currentTool,
-                // Pour un crayon, on commence le tableau de points
-                // Pour un carré, x-y sera le point d'origine
-                points: [pos.x, pos.y],
+                // Si c'est une forme géométrique, on initialise [x1, y1, x2, y2]
+                points: isGeometrical ? [pos.x, pos.y, pos.x, pos.y] : [pos.x, pos.y],
                 stroke: this.currentColor,
                 strokeWidth: this.currentStrokeWidth,
                 draggable: false, // On pourra le rendre draggable plus tard pour le modifier
                 lineCap: 'round',
                 lineJoin: 'round',
-                tension: 0.5,
+                tension: this.currentTool === 'pen' ? 0.5 : 0, // Pas de tension pour les flèches/carrés/cercles
             };
 
             // On l'ajoute au tableau de la map
@@ -133,16 +133,16 @@ export const useDrawingStore = defineStore("drawing", {
                 }
             }
 
-            else if (this.activeShape.type === 'square' || this.activeShape.type === 'arrow') {
-                // Mode Forme géométrique :
-                // On garde toujours les 2 premiers points (origine)
-                // et on remplace les 2 derniers (destination)
-                this.activeShape.points[2] = pos.x;
-                this.activeShape.points[3] = pos.y;
+            else if (this.activeShape.type === 'arrow' || this.activeShape.type === 'square') {
+                // On crée une copie propre du tableau de points
+                const newPoints = [...this.activeShape.points];
 
-                // On force la réactivité en "réassignant" le tableau à lui-même
-                // C'est très rapide, car c'est juste une copie de référence, pas de données
-                this.activeShape.points = [...this.activeShape.points];
+                // On met à jour le point d'arrivée (index 2 et 3)
+                newPoints[2] = pos.x;
+                newPoints[3] = pos.y;
+
+                // On réassigne le tableau entier pour déclencher la réactivité
+                this.activeShape.points = newPoints;
             }
         },
 

@@ -54,6 +54,16 @@ watch(mapImage, (newImg) => { if (newImg) fitStageToImage(); });
 
 					<template v-for="shape in drawingStore.activeMapShapes" :key="shape.id">
 						<v-line v-if="['pen', 'line'].includes(shape.type)" :config="shape" />
+
+						<v-arrow
+							v-if="shape.type === 'arrow'"
+							:config="{
+								...shape,
+								fill: shape.stroke, // La pointe est remplie de la même couleur
+								pointerLength: 15,
+								pointerWidth: 15
+							}"
+						/>
 					</template>
 				</v-layer>
 			</v-stage>
