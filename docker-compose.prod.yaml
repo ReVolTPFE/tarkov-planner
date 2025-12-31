@@ -26,51 +26,41 @@ services:
     symfony:
         build:
             context: ./backend
-            dockerfile: ./docker/Dockerfile
+            dockerfile: ./docker/Dockerfile.prod
         restart: unless-stopped
         container_name: "symfony"
         env_file:
-            - .env
+            - .env.prod
         ports:
             - "${BACKEND_PORT}:80"
         depends_on:
             - db
-        volumes:
-            - ./backend/docker/php.ini:/usr/local/etc/php/conf.d/more_upload_size.ini
-            - ./backend:/var/www/html
 
     nuxt:
         build:
             context: ./frontend
-            dockerfile: ./docker/Dockerfile
+            dockerfile: ./docker/Dockerfile.prod
         restart: unless-stopped
         container_name: "nuxt"
         ports:
             - "${FRONTEND_PORT}:${FRONTEND_PORT}"
         env_file:
-            - .env
+            - .env.prod
         depends_on:
             - db
-        volumes:
-            - ./frontend:/app
-            - /app/node_modules
-            - /app/.nuxt
 
     ws:
         build:
             context: ./websocket-server
-            dockerfile: ./docker/Dockerfile
+            dockerfile: ./docker/Dockerfile.prod
         restart: unless-stopped
         container_name: "websocket-server"
         ports:
             - "${WS_PORT}:${WS_PORT}"
         env_file:
-            - .env
+            - .env.prod
         depends_on:
             - db
-        volumes:
-            - ./websocket-server:/app
-            - /app/node_modules
 
 volumes:
     mysql_data:

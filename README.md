@@ -1,3 +1,7 @@
-Fixtures : `npx prisma db seed`
+# Tarkov Planner
 
-Migrations : `npx prisma migrate dev --name your_migration_name`
+A collaborative tool for the game Escape From Tarkov.
+
+- Backend: Symfony 7.4
+- Frontend: Nuxt 4
+- Websockets: Socket.io
