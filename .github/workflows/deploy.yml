@@ -1,0 +1,33 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to production server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd /var/www/tarkov-planner
+            git pull origin master
+
+            docker compose -f docker-compose.prod.yml down
+            docker compose -f docker-compose.prod.yml up --build -d
+
+            sleep 10
+            docker compose -f docker-compose.prod.yml exec -T symfony php bin/console cache:clear --no-dev --env=prod
+            docker compose -f docker-compose.prod.yml exec -T symfony php bin/console cache:warmup --env=prod
+            docker compose -f docker-compose.prod.yml exec -T symfony php bin/console doctrine:migrations:migrate --no-interaction --env=prod
+
+            docker image prune --filter "dangling=true" -f
+          EOF
