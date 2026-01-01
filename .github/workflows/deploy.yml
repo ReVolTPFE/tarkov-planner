@@ -25,7 +25,7 @@ jobs:
             docker compose -f docker-compose.prod.yml --env-file .env.prod up --build -d
 
             sleep 10
-            docker compose -f docker-compose.prod.yml --env-file .env.prod exec -T symfony php bin/console cache:clear --no-dev --env=prod
+            docker compose -f docker-compose.prod.yml --env-file .env.prod exec -T symfony php bin/console cache:clear --env=prod
             docker compose -f docker-compose.prod.yml --env-file .env.prod exec -T symfony php bin/console cache:warmup --env=prod
             docker compose -f docker-compose.prod.yml --env-file .env.prod exec -T symfony php bin/console doctrine:migrations:migrate --no-interaction --env=prod
 
