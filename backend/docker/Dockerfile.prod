@@ -26,6 +26,9 @@ COPY --from=composer:2.7 /usr/bin/composer /usr/local/bin/composer
 WORKDIR /var/www/html
 COPY . /var/www/html
 
+# to fix symfony who needs a .env file
+RUN touch .env
+
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 CMD ["apache2-foreground"]
