@@ -6,6 +6,8 @@ export const useMapStore = defineStore("map", {
         maps: [] as any[],
         currentMapId: "1" as string | null,
         isLoading: false,
+        currentMapWidth: 0,
+        currentMapHeight: 0,
     }),
 
     actions: {
@@ -23,6 +25,11 @@ export const useMapStore = defineStore("map", {
 
         selectMap(id: string) {
             this.currentMapId = id;
+        },
+
+        setMapDimensions(width: number, height: number) {
+            this.currentMapWidth = width;
+            this.currentMapHeight = height;
         },
     },
 

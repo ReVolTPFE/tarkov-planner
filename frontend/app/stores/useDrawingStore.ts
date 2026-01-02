@@ -1,6 +1,14 @@
 import { defineStore } from "pinia";
 import { useMapStore } from "./useMapStore";
 
+const REFERENCE_WIDTH = 5000;
+export const STROKE_SIZES = {
+    1: 10,
+    2: 20,
+    3: 30,
+};
+const DEFAULT_SIZE_INDEX = 2;
+
 export const useDrawingStore = defineStore("drawing", {
     state: () => ({
         tools: [
@@ -52,12 +60,20 @@ export const useDrawingStore = defineStore("drawing", {
         isDrawing: false,
         activeShape: null as any | null, // La forme en cours de tracé
         currentColor: "#ff5e00",
-        currentStrokeWidth: 10
+        currentStrokeWidth: STROKE_SIZES[DEFAULT_SIZE_INDEX],
+        currentStrokeWidthTool: DEFAULT_SIZE_INDEX
     }),
 
     actions: {
         selectTool(type: string) {
             this.currentTool = type;
+        },
+
+        selectStrokeWidthSize(number: number) {
+            if (number in STROKE_SIZES) {
+                this.currentStrokeWidth = STROKE_SIZES[number as keyof typeof STROKE_SIZES];
+                this.currentStrokeWidthTool = number;
+            }
         },
 
         // Cette action sera utilisée par le Canva et par les WebSockets
@@ -95,6 +111,11 @@ export const useDrawingStore = defineStore("drawing", {
             this.isDrawing = true;
             const isGeometrical = ['arrow', 'square', 'circle'].includes(this.currentTool);
 
+            // --- LOGIQUE DU RATIO ---
+            // On calcule le multiplicateur basé sur la largeur réelle de l'image chargée
+            const ratio = (mapStore.currentMapWidth) / REFERENCE_WIDTH;
+            const adjustedStrokeWidth = this.currentStrokeWidth * ratio;
+
             // On crée l'objet de base
             const newShape = {
                 id: Date.now().toString(),
@@ -102,7 +123,7 @@ export const useDrawingStore = defineStore("drawing", {
                 // Si c'est une forme géométrique, on initialise [x1, y1, x2, y2]
                 points: isGeometrical ? [pos.x, pos.y, pos.x, pos.y] : [pos.x, pos.y],
                 stroke: this.currentColor,
-                strokeWidth: this.currentStrokeWidth,
+                strokeWidth: adjustedStrokeWidth,
                 draggable: false, // On pourra le rendre draggable plus tard pour le modifier
                 lineCap: 'round',
                 lineJoin: 'round',

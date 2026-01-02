@@ -31,7 +31,12 @@ onUnmounted(() => {
 	document.removeEventListener('fullscreenchange', updateSize);
 });
 
-watch(mapImage, (newImg) => { if (newImg) fitStageToImage(); });
+watch(mapImage, (newImg) => {
+	if (newImg) {
+		mapStore.setMapDimensions(newImg.width, newImg.height);
+		fitStageToImage();
+	}
+});
 </script>
 
 <template>
