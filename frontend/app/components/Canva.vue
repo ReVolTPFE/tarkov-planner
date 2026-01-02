@@ -62,12 +62,7 @@ watch(mapImage, (newImg) => {
 
 						<v-arrow
 							v-if="shape.type === 'arrow'"
-							:config="{
-								...shape,
-								fill: shape.stroke, // La pointe est remplie de la même couleur
-								pointerLength: 15,
-								pointerWidth: 15
-							}"
+							:config="shape"
 						/>
 
 						<v-rect v-if="shape.type === 'square'" :config="{

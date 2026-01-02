@@ -1,5 +1,5 @@
 <script setup>
-import { useDrawingStore, STROKE_SIZES } from "../stores/useDrawingStore.js";
+import { useDrawingStore, STROKE_SIZES, COLORS } from "../stores/useDrawingStore.js";
 import { useMapStore } from "../stores/useMapStore.js";
 
 const drawingStore = useDrawingStore();
@@ -38,16 +38,30 @@ const handleToolClick = (tool) => {
 		</div>
 
 		<div class="pl-2" :class="{ hidden: showExtraParams === false }">
-			<p v-for="id in strokeSizeIds"
-			   :key="id"
-			   class="tool flex justify-center items-center"
-			   :class="{ active: drawingStore.currentStrokeWidthTool === id }"
-			   @click="drawingStore.selectStrokeWidthSize(id)"
+			<p
+				v-for="id in strokeSizeIds"
+				:key="id"
+				class="tool flex justify-center items-center"
+				:class="{ active: drawingStore.currentStrokeWidthTool === id }"
+				@click="drawingStore.selectStrokeWidthSize(id)"
 			>
 				<i class="fa-solid fa-circle"
 				   :style="{ fontSize: (4 + id * 4) + 'px' }"
 				></i>
 			</p>
+
+			<p
+				v-for="color in COLORS"
+				:key="color"
+				class="tool"
+				:class="{ 'active-color': drawingStore.currentColor === color }"
+				:style="{
+					position: 'relative',
+					backgroundColor: color,
+					borderColor: drawingStore.currentColor === color ? 'white' : 'transparent'
+				}"
+				@click="drawingStore.currentColor = color"
+			></p>
 		</div>
 	</div>
 </template>
@@ -67,6 +81,18 @@ const handleToolClick = (tool) => {
 
 	&:active {
 		@apply bg-primary text-white;
+	}
+
+	&.active-color {
+		&::after {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			@apply border-4 border-primary rounded;
+		}
 	}
 }
 </style>

@@ -8,6 +8,12 @@ export const STROKE_SIZES = {
     3: 30,
 };
 const DEFAULT_SIZE_INDEX = 2;
+export const COLORS = [
+    "#ffffff",
+    "#000000",
+    "#0077ff",
+    "#e60707",
+];
 
 export const useDrawingStore = defineStore("drawing", {
     state: () => ({
@@ -59,7 +65,7 @@ export const useDrawingStore = defineStore("drawing", {
         drawings: {} as Record<string, any[]>,
         isDrawing: false,
         activeShape: null as any | null, // La forme en cours de tracé
-        currentColor: "#ff5e00",
+        currentColor: COLORS[0],
         currentStrokeWidth: STROKE_SIZES[DEFAULT_SIZE_INDEX],
         currentStrokeWidthTool: DEFAULT_SIZE_INDEX
     }),
@@ -128,6 +134,11 @@ export const useDrawingStore = defineStore("drawing", {
                 lineCap: 'round',
                 lineJoin: 'round',
                 tension: this.currentTool === 'pen' ? 0.5 : 0, // Pas de tension pour les flèches/carrés/cercles
+                ...(this.currentTool === 'arrow' && {
+                    fill: this.currentColor,
+                    pointerLength: adjustedStrokeWidth * 2,
+                    pointerWidth: adjustedStrokeWidth * 2
+                }),
             };
 
             // On l'ajoute au tableau de la map
