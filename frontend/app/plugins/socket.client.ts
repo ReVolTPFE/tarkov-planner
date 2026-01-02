@@ -36,6 +36,10 @@ export default defineNuxtPlugin(() => {
 		drawingStore.addShapeToMap(data.mapSlug, data.shape);
 	});
 
+	socket.on("delete-shape", (data: { shapeId: string, mapSlug: string }) => {
+		drawingStore.removeShape(data.mapSlug, data.shapeId);
+	});
+
 	// Quand la map est vidée par quelqu'un d'autre
 	socket.on("canva-cleared", (mapSlug) => {
 		drawingStore.clearMap(mapSlug);

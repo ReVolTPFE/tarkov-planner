@@ -18,6 +18,13 @@ export default defineNuxtConfig({
 	modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
 	app: {
 		head: {
+			htmlAttrs: {
+				lang: 'en'
+			},
+			title: 'Tarkov Planner',
+			meta: [
+				{ name: 'description', content: 'The ultimate collaborative tactical tool for Tarkov players. Draw strategies, mark loot, and share live raid plans with your teammates on detailed maps.' }
+			],
 			script: [
 				{
 					src: 'https://kit.fontawesome.com/8ba44779d9.js',

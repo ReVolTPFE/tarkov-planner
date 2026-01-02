@@ -36,6 +36,21 @@ io.on("connection", (socket) => {
 		socket.to(roomId).emit("new-shape", { shape, mapSlug });
 	});
 
+	socket.on("delete-shape", ({ roomId, mapSlug, shapeId }) => {
+		if (roomStates[roomId]) {
+			// 1. Nettoyage de la RAM : on filtre pour supprimer la shape
+			const initialCount = roomStates[roomId].length;
+			roomStates[roomId] = roomStates[roomId].filter(item =>
+				!(item.mapSlug === mapSlug && item.shape.id === shapeId)
+			);
+
+			// 2. Diffusion aux autres si quelque chose a été supprimé
+			if (roomStates[roomId].length < initialCount) {
+				socket.to(roomId).emit("delete-shape", { shapeId, mapSlug });
+			}
+		}
+	});
+
 	socket.on("clear-canva", ({ roomId, mapSlug }) => {
 		if (roomStates[roomId]) {
 			// On ne garde que les dessins qui ne sont PAS sur cette map

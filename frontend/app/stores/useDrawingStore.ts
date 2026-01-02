@@ -33,9 +33,13 @@ export const useDrawingStore = defineStore("drawing", {
             //     icon: "fa-solid fa-rotate-right",
             // },
             {
-                type: "trash",
-                icon: "fa-solid fa-trash",
+                type: "eraser",
+                icon: "fa-solid fa-eraser",
             },
+            // {
+            //     type: "trash",
+            //     icon: "fa-solid fa-trash",
+            // },
             {
                 type: "fullscreen",
                 icon: "fa-solid fa-expand",
@@ -172,6 +176,23 @@ export const useDrawingStore = defineStore("drawing", {
             }
         },
 
+        removeShape(mapSlug: string, shapeId: string, localOnly = true) {
+            if (!this.drawings[mapSlug]) return;
+
+            this.drawings[mapSlug] = this.drawings[mapSlug].filter(s => s.id !== shapeId);
+
+            if (!localOnly) {
+                const { $socket } = useNuxtApp();
+                const route = useRoute();
+
+                $socket.emit("delete-shape", {
+                    roomId: route.params.uuid,
+                    mapSlug: mapSlug,
+                    shapeId: shapeId
+                });
+            }
+        },
+
         stopDrawing() {
             if (!this.isDrawing || !this.activeShape) return;
 
@@ -200,7 +221,7 @@ export const useDrawingStore = defineStore("drawing", {
             } else {
                 document.exitFullscreen();
             }
-        }
+        },
     },
 
     getters: {

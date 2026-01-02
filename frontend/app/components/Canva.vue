@@ -66,14 +66,16 @@ watch(mapImage, (newImg) => { if (newImg) fitStageToImage(); });
 						/>
 
 						<v-rect v-if="shape.type === 'square'" :config="{
-							   x: Math.min(shape.points[0], shape.points[2]),
-							   y: Math.min(shape.points[1], shape.points[3]),
-							   width: Math.abs(shape.points[2] - shape.points[0]),
-							   height: Math.abs(shape.points[3] - shape.points[1]),
-							   stroke: shape.stroke,
-							   strokeWidth: shape.strokeWidth,
-							   lineCap: 'round',
-							   lineJoin: 'round'
+								id: shape.id,
+								x: Math.min(shape.points[0], shape.points[2]),
+								y: Math.min(shape.points[1], shape.points[3]),
+								width: Math.abs(shape.points[2] - shape.points[0]),
+								height: Math.abs(shape.points[3] - shape.points[1]),
+								stroke: shape.stroke,
+								strokeWidth: shape.strokeWidth,
+								lineCap: 'round',
+								lineJoin: 'round',
+								fillEnabled: false,
 						   }"
 						/>
 							<!-- Cercle par son centre -->
@@ -90,12 +92,14 @@ watch(mapImage, (newImg) => { if (newImg) fitStageToImage(); });
 						<v-ellipse
 							v-if="shape.type === 'circle'"
 							:config="{
+								id: shape.id,
 								x: shape.centerX,
 								y: shape.centerY,
 								radiusX: shape.radiusX || 0,
 								radiusY: shape.radiusY || 0,
 								stroke: shape.stroke,
-								strokeWidth: shape.strokeWidth
+								strokeWidth: shape.strokeWidth,
+								fillEnabled: false,
 							}"
 						/>
 					</template>
